@@ -27,7 +27,7 @@ class create_dict(dict):
 
 @app.get("/")
 def read_root():
-    mycursor.execute("SELECT * FROM CUSTOMERS;")
+    mycursor.execute("SELECT * FROM CUSTOMERS LIMIT 100;")
     df = mycursor.fetchall()
     mydict = create_dict()
     for row in df:
