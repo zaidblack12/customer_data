@@ -26,10 +26,13 @@ class create_dict(dict):
         self[key] = value
 
 @app.get("/")
-def read_root():
-    mycursor.execute("SELECT * FROM CUSTOMERS LIMIT 100;")
-    df = mycursor.fetchall()
+def read_root(limit: int=100):
+    mycursor = mydb.cursor()
+    sql = "Select * from Customers limit %s;"
+    val = (limit)
     mydict = create_dict()
+    mycursor.execute(sql, (val,))
+    df = mycursor.fetchall()
     for row in df:
         mydict.add(row[0],({"Customer_id": row[0], "transaction_amount": row[1], "Mobile_no": row[2], "Pincode": row[4]}))
     stud_json = json.dumps(mydict, indent=2, sort_keys=True)
@@ -48,12 +51,12 @@ def insert_data(id: int=0, amount: int=0, mobileno: int=0, pincode: int=0):
 
 
 @app.get("/transaction_range/")
-def filter_data_based_transaction_range(start: int=0, end: int=0):
+def filter_data_based_transaction_range(start: int=0, end: int=0, limit: int=100):
     mycursor = mydb.cursor()
     sql = "select Customer_id, Mobile_no, sum(transaction_amount) as Total_Amt from customers where transaction_amount between %s and %s\
           group by Mobile_no\
-          order by Total_Amt desc;"
-    val = (start,end)
+          order by Total_Amt desc limit %s;"
+    val = (start,end, limit)
     mydict = create_dict()
     mycursor.execute(sql, val)
     df = mycursor.fetchall()
