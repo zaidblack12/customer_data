@@ -1,7 +1,7 @@
-from typing import Union
 from fastapi import FastAPI
 import mysql.connector                                         #mysql connection module
 import json
+import time
 
 
 app = FastAPI()
@@ -35,6 +35,17 @@ def read_root():
     stud_json = json.dumps(mydict, indent=2, sort_keys=True)
     response_json = json.loads(stud_json)
     return response_json
+
+@app.post("/insert_data/")
+def insert_data(id: int=0, amount: int=0, mobileno: int=0, pincode: int=0):
+    current_datetime = time.strftime('%Y-%m-%d %H:%M:%S')
+    mycursor = mydb.cursor()
+    sql = "INSERT INTO customers (Customer_id, transaction_amount, Mobile_no, transaction_datetime, Pincode) VALUES (%s, %s, %s, %s, %s)"
+    val = (id,amount,mobileno,current_datetime,pincode)
+    mycursor.execute(sql,val)
+    mydb.commit()
+    return "data created"
+
 
 @app.get("/transaction_range/")
 def filter_data_based_transaction_range(start: int=0, end: int=0):
