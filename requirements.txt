@@ -1,0 +1,2 @@
+FastAPI
+mysql-connector-python
