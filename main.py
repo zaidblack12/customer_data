@@ -1,11 +1,13 @@
 from fastapi import FastAPI
-import mysql.connector                                         #mysql connection module
+import mysql.connector
 import json
 import time
 from helper_class import create_dict
 
 
 app = FastAPI()
+
+#Database connection
 mydb = mysql.connector.connect(
         host="localhost",
         user="root",
@@ -13,7 +15,7 @@ mydb = mysql.connector.connect(
         database="bank"
     )
 
-
+#fetch the all details of customers data with default limit=100
 @app.get("/")
 def read_root(limit: int=100):
     mycursor = mydb.cursor()
@@ -23,7 +25,7 @@ def read_root(limit: int=100):
     df = mycursor.fetchall()
     response_json = add_keys_to_json(df)
     return response_json
-
+#insert data in the customers data
 @app.post("/insert_data/")
 def insert_data(id: int=0, amount: int=0, mobileno: int=0, pincode: int=0):
     current_datetime = time.strftime('%Y-%m-%d %H:%M:%S')
@@ -34,7 +36,7 @@ def insert_data(id: int=0, amount: int=0, mobileno: int=0, pincode: int=0):
     mydb.commit()
     return "data created"
 
-
+#fetch the result with range of transaction amount
 @app.get("/transaction_range/")
 def filter_data_based_transaction_range(start: int=0, end: int=0, limit: int=100):
     mycursor = mydb.cursor()
@@ -46,7 +48,7 @@ def filter_data_based_transaction_range(start: int=0, end: int=0, limit: int=100
     df = mycursor.fetchall()
     response_json = add_keys_to_json(df)
     return response_json
-
+#fetch the top5 customers for each pincode with input state
 @app.get("/top_customers_per_pincode/")
 def top_customers_per_pincode(state: str=''):
     mycursor = mydb.cursor()
@@ -57,7 +59,7 @@ def top_customers_per_pincode(state: str=''):
     response_json = add_keys_to_json(df)
     return response_json
 
-
+#method to add keys in json
 def add_keys_to_json(data):
     dict=create_dict()
     for row in data:
