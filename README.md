@@ -88,7 +88,7 @@ Limit can be added to restrict the data to any number. Eg ‘/?limit=50’ will 
 </td>
   </tr>
   <tr>
-    <td>‘/’transaction_range/?start=50andend=100’</td>
+    <td>‘/transaction_range/?start=2000&end=5000’</td>
     <td>get</td>
     <td>Get all the customer data whose total transaction amount is between param start and end, this month, or this year or all time.
 Limit can be added to restrict the data, Default limit is 100 
