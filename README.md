@@ -72,6 +72,11 @@ Start the server to bring up the api service.**
 
 `$ uvicorn main:app —reload`
 
+**Step 4 Install the postman for using the post api while inserting the data**
+
+https://www.postman.com/downloads/
+
+
 # **API Endpoints**
  
 <table>
@@ -104,7 +109,8 @@ Filter the customer data by any ‘state’ name</td>
     <td>post</td>
     <td>Insert customer data in database within param is ‘id’,’amount’,’mobileno’,’pincode’.
 Date time data is auto set ar current date and time, 
-(yyyy-mm-dd hh:mm:ss)</td>
+(yyyy-mm-dd hh:mm:ss), and kindly put all the parameter in the postman while using this POST API</td>
+    
   </tr>
   </tr>
     </tr>

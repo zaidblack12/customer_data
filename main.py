@@ -11,7 +11,7 @@ app = FastAPI()
 mydb = mysql.connector.connect(
         host="localhost",
         user="root",
-        password=" ",
+        password="zaid1234",
         database="bank"
     )
 
@@ -52,7 +52,7 @@ def filter_data_based_transaction_range(start: int=0, end: int=0, limit: int=100
 @app.get("/top_customers_per_pincode/")
 def top_customers_per_pincode(state: str=''):
     mycursor = mydb.cursor()
-    sql = "Select distinct  c.Customer_id, c.Mobile_no, c.Pincode from ( Select c.Customer_id, c.Mobile_no, c.transaction_amount, c.Pincode, @pincode_rank := IF(@current_pincode =  c.Pincode, @pincode_rank + 1, 1) AS pincode_rank,  @current_pincode:=  c.Pincode FROM Customers as c ORDER BY  c.Pincode,  c.transaction_amount desc ) c LEFT JOIN  pincode_master as p ON c.pincode = p.pincode where pincode_rank<=5 and p.statename = %s ;"
+    sql = "Select distinct  c.Customer_id, c.Mobile_no, c.Pincode from ( Select c.Customer_id, c.Mobile_no, c.transaction_amount, c.Pincode, @pincode_rank := IF(@current_pincode =  c.Pincode, @pincode_rank + 1, 1) AS pincode_rank,  @current_pincode:=  c.Pincode FROM Customers as c ORDER BY  c.Pincode,  c.transaction_amount desc ) c LEFT JOIN  state_master as p ON c.pincode = p.pincode where pincode_rank<=5 and p.statename = %s ;"
     val = (state)
     mycursor.execute(sql,(val,))
     df = mycursor.fetchall()
